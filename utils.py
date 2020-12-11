@@ -1,6 +1,6 @@
 import pymysql.cursors
 from cerberus import Validator
-from .config import Config
+from config import Config
 
 
 def call_procedure(query, parameter_values=None):

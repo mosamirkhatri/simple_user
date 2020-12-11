@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template
 
-from .utils import call_procedure, validate_request
+from utils import call_procedure, validate_request
 
 app = Flask(__name__)
 
