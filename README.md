@@ -96,3 +96,37 @@ response_body:
 ./procedures/check_existing_email_mobile.sql
 
 #
+
+# Deployment Procedure 
+
+Deployed my flask app on AWS EC-2. The App is currently hosted on 13.235.51.69 (Public IP)
+
+Used Gunicorn as a service for deployment and nginx as a webserver.
+
+# service file
+[Unit]
+Description=Service File
+After=network.target
+
+[Service]
+User=ec2-user
+WorkingDirectory=/home/ec2-user/unizyr
+ExecStart=/home/ec2-user/unizyr/venv/bin/gunicorn -b localhost:5000 -w 4 app:app
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+
+[Install]
+WantedBy=multi-user.target
+
+# Nginx conf file
+
+server {
+    listen 80;
+    server_name 13.235.51.69;
+
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+    }
+}

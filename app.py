@@ -5,9 +5,13 @@ from utils import call_procedure, validate_request
 app = Flask(__name__)
 
 
+@app.before_first_request
+def before_first_request():
+    call_procedure('CALL create_user_table')
+
+
 @app.route('/')
 def hello_world():
-    # f = open('index.txt', 'r')
     return render_template('index.html')
 
 
@@ -38,15 +42,16 @@ def get_users():
 
         elif request.method == "POST":
             request_data = request.get_json()
+
             [valid, error] = validate_request(request_data)
             if not valid:
                 return {"success": False, "message": error}, 400
 
-            # Check duplicates for email/mobile
             name = request_data.get('name')
             email = request_data.get('email')
             mobile = request_data.get('mobile')
 
+            # Check duplicates for email/mobile
             duplicate_values = call_procedure(
                 "CALL check_existing_email_mobile(%s, %s);", (email, mobile))
             if duplicate_values:
