@@ -1,0 +1,15 @@
+[Unit]
+Description=Service File
+After=network.target
+
+[Service]
+User=ec2-user
+WorkingDirectory=/home/ec2-user/unizyr
+ExecStart=/home/ec2-user/unizyr/venv/bin/gunicorn -b localhost:5000 -w 4 app:app
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+
+[Install]
+WantedBy=multi-user.target
